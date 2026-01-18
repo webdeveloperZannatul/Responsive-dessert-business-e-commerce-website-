@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title></title>
+  <meta name="description" content="Shop premium desserts, handcrafted ice cream, and luxury chocolate from Your Business Name. Elegant, fresh, and delivered with love.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            cocoa: '#4A2C2A',
+            truffle: '#6B4E45',
+            cream: '#FFF9F3',
+            mint: '#CDE6D0',
+            strawberry: '#FAD1DF',
+            caramel: '#D9B89C',
+          },
+          boxShadow: {
+            soft: '0 10px 30px rgba(0,0,0,0.08)',
+          },
+          backgroundImage: {
+            'hero-gradient': 'linear-gradient(120deg, rgba(250,209,223,0.3), rgba(205,230,208,0.3))',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --header-h: 72px;
+    }
+    .glass {
+      backdrop-filter: saturate(140%) blur(10px);
+      -webkit-backdrop-filter: saturate(140%) blur(10px);
+      background: rgba(255, 255, 255, 0.65);
+    }
+    .btn {
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -6px;
+      width: 0; height: 2px; background: #4A2C2A; transition: width .2s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .hero-slide {
+      opacity: 0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease;
+    }
+    .hero-slide.active { opacity: 1; transform: translateY(0); }
+    .card {
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 35px rgba(0,0,0,.08);
+    }
+    .badge {
+      box-shadow: 0 6px 16px rgba(74,44,42,.2);
+    }
+    .sticky-cart {
+      position: fixed; right: 18px; bottom: 18px; z-index: 60;
+    }
+    .mobile-menu-enter {
+      opacity: 0; transform: translateY(-8px);
+    }
+    .mobile-menu-enter-active {
+      opacity: 1; transform: translateY(0); transition: all .18s ease;
+    }
+    .pill {
+      border-radius: 9999px;
+    }
+    .input {
+      transition: box-shadow .2s ease, border-color .2s ease;
+    }
+    .input:focus {
+      outline: none; border-color: #6B4E45;
+      box-shadow: 0 0 0 4px rgba(107,78,69,.15);
+    }
+    .section {
+      scroll-margin-top: calc(var(--header-h) + 20px);
+    }
+  </style>
+</head>
+<body class="bg-cream text-truffle antialiased">
+  <!-- Header -->
+  <header class="fixed inset-x-0 top-0 z-50">
+    <div class="glass shadow-soft">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[var(--header-h)] flex items-center justify-between">
+        <a href="#home" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-strawberry to-mint grid place-items-center shadow">
+            <span class="font-serif text-lg text-cocoa">DL</span>
+          </div>
+          <div>
+            <div class="font-serif text-xl text-cocoa leading-none">Dessert BusinessName</div>
+            <div class="text-xs text-truffle/70">Desserts • Ice Cream • Chocolate</div>
+          </div>
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="#home" class="nav-link text-truffle hover:text-cocoa">Home</a>
+          <a href="#shop" class="nav-link text-truffle hover:text-cocoa">Shop</a>
+          <a href="#about" class="nav-link text-truffle hover:text-cocoa">About</a>
+          <a href="#gallery" class="nav-link text-truffle hover:text-cocoa">Gallery</a>
+          <a href="#contact" class="nav-link text-truffle hover:text-cocoa">Contact</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <button id="openCart" class="btn pill bg-cocoa text-white px-4 py-2 shadow-soft hidden md:inline-flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h2l.4 2M7 13h10l3-7H6.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 22a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/></svg>
+            <span>Cart</span>
+            <span id="cartCount" class="ml-1 text-cocoa bg-mint pill px-2 py-0.5 text-xs font-semibold">0</span>
+          </button>
+          <button id="mobileMenuBtn" class="md:hidden p-2 rounded-md hover:bg-white/60">
+            <svg class="w-7 h-7 text-cocoa" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="mobileMenu" class="md:hidden hidden px-4 pb-4 mobile-menu-enter">
+        <div class="bg-white/70 rounded-xl shadow-soft p-3 space-y-1">
+          <a href="#home" class="block px-3 py-2 rounded-lg hover:bg-cream">Home</a>
+          <a href="#shop" class="block px-3 py-2 rounded-lg hover:bg-cream">Shop</a>
+          <a href="#about" class="block px-3 py-2 rounded-lg hover:bg-cream">About</a>
+          <a href="#gallery" class="block px-3 py-2 rounded-lg hover:bg-cream">Gallery</a>
+          <a href="#contact" class="block px-3 py-2 rounded-lg hover:bg-cream">Contact</a>
+          <button id="openCartMobile" class="w-full mt-2 btn pill bg-cocoa text-white px-4 py-2">View Cart</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-[calc(var(--header-h)+10px)]">
+    <!-- Hero -->
+    <section id="home" class="section relative overflow-hidden">
+      <div class="absolute inset-0 bg-hero-gradient"></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <div  class="space-y-5">
+              <div >
+                <span class="badge inline-block bg-strawberry text-cocoa pill px-3 py-1 text-sm font-medium">New Seasonal Menu</span>
+                <h1 class="font-serif text-4xl sm:text-5xl text-cocoa mt-3">Handcrafted Desserts, Made Fresh Daily</h1>
+                <p class="text-truffle/80 mt-3">From delicate patisserie to decadent chocolates, discover treats crafted with passion and premium ingredients.</p>
+              </div>
+              <div >
+                <span class="badge inline-block bg-mint text-cocoa pill px-3 py-1 text-sm font-medium">Free Delivery Over $50</span>
+                <h2 class="font-serif text-4xl sm:text-5xl text-cocoa mt-3">Small-Batch Ice Cream</h2>
+                <p class="text-truffle/80 mt-3">Churned in-house for a silky finish. Classic flavors and bold seasonal twists.</p>
+              </div>
+              <div class="hero-slide">
+                <span class="badge inline-block bg-caramel text-white pill px-3 py-1 text-sm font-medium">Limited Edition</span>
+                <h2 class="font-serif text-4xl sm:text-5xl text-cocoa mt-3">Luxury Chocolate Collection</h2>
+                <p class="text-truffle/80 mt-3">Single-origin cacao, tempered to perfection for shine, snap, and sublime taste.</p>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-3 mt-6">
+              <a href="#shop" class="btn pill bg-cocoa text-white px-6 py-3 shadow-soft">Shop Now</a>
+              <a href="#about" class="btn pill bg-white text-cocoa px-6 py-3 shadow border border-truffle/10">Our Story</a>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="absolute -inset-6 -z-10 rounded-3xl bg-white/60 shadow-soft"></div>
+            <div class="grid grid-cols-12 gap-3">
+              <img alt="Dessert 1" class="col-span-7 rounded-2xl object-cover aspect-[4/5] shadow-soft" src="https://i.postimg.cc/dQHZ64Yw/Dessert.png?q=80&w=1200&auto=format&fit=crop" />
+              <img alt="Chocolate" class="col-span-5 rounded-2xl object-cover aspect-[3/4] shadow-soft" src="https://i.postimg.cc/Y9BZJ6B4/Chocolate.png?q=80&w=1200&auto=format&fit=crop" />
+              <img alt="Ice Cream" class="col-span-6 rounded-2xl object-cover aspect-square shadow-soft" src="https://i.postimg.cc/RZ1WZym7/Ice-Cream1.png?q=80&w=1200&auto=format&fit=crop" />
+              <img alt="Macarons" class="col-span-6 rounded-2xl object-cover aspect-square shadow-soft" src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="section py-14 sm:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between mb-8">
+          <div>
+            <h3 class="font-serif text-3xl text-cocoa">Featured Products</h3>
+            <p class="text-truffle/70">Curated bestsellers, baked fresh and ready to delight.</p>
+          </div>
+          <a href="#shop" class="hidden sm:inline-flex btn pill bg-white text-cocoa px-5 py-2.5 border border-truffle/10">Browse All</a>
+        </div>
+        <div id="featuredGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- Shop -->
+    <section id="shop" class="section py-14 sm:py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+          <div>
+            <h3 class="font-serif text-3xl text-cocoa">Shop</h3>
+            <p class="text-truffle/70">Desserts • Ice Cream • Chocolate</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button data-filter="All" class="filter-btn btn pill bg-cocoa text-white px-4 py-2">All</button>
+            <button data-filter="Desserts" class="filter-btn btn pill bg-cream text-cocoa border border-truffle/10 px-4 py-2">Desserts</button>
+            <button data-filter="Ice Cream" class="filter-btn btn pill bg-cream text-cocoa border border-truffle/10 px-4 py-2">Ice Cream</button>
+            <button data-filter="Chocolate" class="filter-btn btn pill bg-cream text-cocoa border border-truffle/10 px-4 py-2">Chocolate</button>
+          </div>
+        </div>
+        <div id="shopGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- Our Story -->
+    <section id="about" class="section py-14 sm:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
+        <div class="relative">
+          <div class="absolute -inset-4 -z-10 rounded-3xl bg-strawberry/30"></div>
+          <img src="https://i.postimg.cc/9fJk8rYD/artisans-of-sweetness1.png?q=80&w=1200&auto=format&fit=crop" class="rounded-3xl shadow-soft object-cover w-full h-full" alt="Patisserie kitchen">
+        </div>
+        <div>
+          <h3 class="font-serif text-3xl text-cocoa mb-3">Our Story</h3>
+          <p class="text-truffle/80 leading-relaxed">We’re artisans of sweetness. Our kitchen blends classic French technique with modern flavors, using locally sourced dairy, seasonal fruit, and sustainably harvested cacao. Every bite is a celebration of texture, aroma, and balance.</p>
+          <ul class="mt-5 space-y-2 text-truffle/80">
+            <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-mint grid place-items-center text-cocoa">✓</span>Small-batch, hand-finished desserts</li>
+            <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-mint grid place-items-center text-cocoa">✓</span>Natural ingredients, no shortcuts</li>
+            <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-mint grid place-items-center text-cocoa">✓</span>Crafted fresh daily</li>
+          </ul>
+          <a href="#shop" class="mt-6 inline-flex btn pill bg-cocoa text-white px-6 py-3">Shop the Collection</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery / Instagram -->
+    <section id="gallery" class="section py-14 sm:py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between mb-8">
+          <div>
+            <h3 class="font-serif text-3xl text-cocoa">From Our Kitchen</h3>
+            <p class="text-truffle/70">A sweet peek at what we’re plating today.</p>
+          </div>
+          <a href="https://instagram.com" target="_blank" class="hidden sm:inline-flex btn pill bg-white text-cocoa px-5 py-2.5 border border-truffle/10">Follow on Instagram</a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" id="instaGrid"></div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section py-14 sm:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10">
+        <div>
+          <h3 class="font-serif text-3xl text-cocoa mb-3">Get in Touch</h3>
+          <p class="text-truffle/80 mb-6">Questions, custom orders, or catering inquiries? We’d love to help.</p>
+          <form id="contactForm" class="bg-white rounded-2xl shadow-soft p-6 space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="text-sm text-truffle/70">First Name</label>
+                <input type="text" required class="input w-full mt-1 px-4 py-2.5 border border-truffle/10 rounded-xl" placeholder="Jane">
+              </div>
+              <div>
+                <label class="text-sm text-truffle/70">Last Name</label>
+                <input type="text" required class="input w-full mt-1 px-4 py-2.5 border border-truffle/10 rounded-xl" placeholder="Doe">
+              </div>
+            </div>
+            <div>
+              <label class="text-sm text-truffle/70">Email</label>
+              <input type="email" required class="input w-full mt-1 px-4 py-2.5 border border-truffle/10 rounded-xl" placeholder="you@example.com">
+            </div>
+            <div>
+              <label class="text-sm text-truffle/70">Message</label>
+              <textarea required rows="4" class="input w-full mt-1 px-4 py-2.5 border border-truffle/10 rounded-xl" placeholder="Tell us about your request"></textarea>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="text-sm text-truffle/70">Business Hours: Mon–Sat 9:00–18:00</div>
+              <button class="btn pill bg-cocoa text-white px-6 py-3" type="submit">Send Message</button>
+            </div>
+            <p id="contactMsg" class="hidden text-green-700 bg-mint/50 pill px-3 py-2 text-sm"></p>
+          </form>
+        </div>
+        <div class="space-y-4">
+          <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
+            <iframe title="Map" class="w-full h-72" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Paris&output=embed"></iframe>
+          </div>
+          <div class="bg-white rounded-2xl shadow-soft p-6">
+            <h4 class="font-serif text-2xl text-cocoa mb-2">Visit Us</h4>
+            <p class="text-truffle/80">123 Sweet Street, Dessert City</p>
+            <p class="text-truffle/80">Phone: (123) 456-7890</p>
+            <p class="text-truffle/80">Email: hello@dessertbusiness.com</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="section py-10">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 bg-white rounded-2xl shadow-soft p-6 sm:p-8 text-center">
+        <h3 class="font-serif text-2xl text-cocoa">Join Our Tasting Club</h3>
+        <p class="text-truffle/70 mt-1">Exclusive drops, early access, and sweet perks.</p>
+        <form id="newsletterForm" class="mt-5 flex flex-col sm:flex-row gap-3 justify-center">
+          <input type="email" required class="input w-full sm:w-auto flex-1 px-4 py-3 border border-truffle/10 rounded-xl" placeholder="you@example.com">
+          <button class="btn pill bg-cocoa text-white px-6 py-3" type="submit">Subscribe</button>
+        </form>
+        <p id="newsletterMsg" class="hidden mt-3 text-green-700">Thanks! Please check your inbox to confirm.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-cocoa text-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-white/10 grid place-items-center">🍰</div>
+          <div class="font-serif text-xl">Dessert BusinessName</div>
+        </div>
+        <p class="mt-3 text-cream/80">Premium desserts crafted with love. Delivered fresh.</p>
+      </div>
+      <div>
+        <h5 class="font-semibold mb-3">Shop</h5>
+        <ul class="space-y-2 text-cream/80">
+          <li><a href="#shop" class="hover:underline">All Products</a></li>
+          <li><a href="#shop" class="hover:underline">Desserts</a></li>
+          <li><a href="#shop" class="hover:underline">Ice Cream</a></li>
+          <li><a href="#shop" class="hover:underline">Chocolate</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-semibold mb-3">Company</h5>
+        <ul class="space-y-2 text-cream/80">
+          <li><a href="#about" class="hover:underline">About Us</a></li>
+          <li><a href="#contact" class="hover:underline">Contact</a></li>
+          <li><a href="#gallery" class="hover:underline">Gallery</a></li>
+          <li><a href="#home" class="hover:underline">Offers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-semibold mb-3">Stay Connected</h5>
+        <div class="flex gap-3">
+          <a href="#" class="w-9 h-9 rounded-full bg-white/10 grid place-items-center hover:bg-white/20">IG</a>
+          <a href="#" class="w-9 h-9 rounded-full bg-white/10 grid place-items-center hover:bg-white/20">FB</a>
+          <a href="#" class="w-9 h-9 rounded-full bg-white/10 grid place-items-center hover:bg-white/20">TT</a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="text-cream/70 text-sm">© <span id="year"></span> Our Dessert Business Name. All rights reserved Designed By Zannatul.</p>
+        <p class="text-cream/50 text-xs">Built for WooCommerce-ready WordPress integration.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sticky Cart Button (mobile) -->
+  <button id="floatingCart" class="sticky-cart md:hidden btn pill bg-cocoa text-white px-4 py-3 shadow-soft flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h2l.4 2M7 13h10l3-7H6.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 22a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/></svg>
+    <span>Cart</span>
+    <span id="cartCountFloat" class="ml-1 text-cocoa bg-mint pill px-2 py-0.5 text-xs font-semibold">0</span>
+  </button>
+
+  <!-- Cart Drawer -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 hidden">
+    <div id="cartBackdrop" class="absolute inset-0 bg-black/30"></div>
+    <aside class="absolute right-0 top-0 h-full w-full sm:w-[420px] bg-white shadow-2xl p-6 flex flex-col">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="font-serif text-2xl text-cocoa">Your Cart</h4>
+        <button id="closeCart" class="p-2 rounded-md hover:bg-cream" aria-label="Close Cart">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-truffle" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="cartItems" class="flex-1 overflow-y-auto divide-y divide-truffle/10"></div>
+      <div class="pt-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-truffle/70">Subtotal</span>
+          <span id="cartSubtotal" class="font-semibold text-cocoa">$0.00</span>
+        </div>
+        <button id="checkoutBtn" class="btn w-full pill bg-cocoa text-white px-6 py-3">Proceed to Checkout</button>
+        <p class="text-xs text-truffle/60 text-center">Demo cart. Connect to WooCommerce checkout in WordPress.</p>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // Demo product data (map to WooCommerce products later)
+    const PRODUCTS = [
+      { id: 1, name: "Raspberry Macaron Box", price: 18.00, category: "Desserts", img: "https://i.postimg.cc/MTfMqTpX/Raspberry-Macaron-Box.png?q=80&w=1200&auto=format&fit=crop" },
+      { id: 2, name: "Triple Chocolate Tart", price: 9.50, category: "Desserts", img: "https://i.postimg.cc/VNrLbhPQ/Triple-Chocolate-Tart.png?q=80&w=1200&auto=format&fit=crop" },
+      { id: 3, name: "Vanilla Bean Gelato Pint", price: 12.00, category: "Ice Cream", img: "https://i.postimg.cc/VsDQmF2K/Vanilla-Bean-Gelato-Pint.png?q=80&w=1200&auto=format&fit=crop" },
+      { id: 4, name: "Pistachio Ice Cream Pint", price: 12.50, category: "Ice Cream", img: "https://i.postimg.cc/N07Cbsc9/Pistachio-Ice-Cream-Pint.pngMatcha White Chocolate Bar?q=80&w=1200&auto=format&fit=crop" },
+      { id: 5, name: "Sea Salt Caramel Truffles", price: 16.00, category: "Chocolate", img: "https://i.postimg.cc/sf6jwyfy/Sea-Salt-Caramel-Truffles.png?q=80&w=1200&auto=format&fit=crop" },
+      { id: 6, name: "Single-Origin Dark Bar 72%", price: 7.00, category: "Chocolate", img: "https://i.postimg.cc/MKsH0YhR/Single-Origin-Dark-Bar-72.png?q=80&w=1200&auto=format&fit=crop" },
+      { id: 7, name: "Lemon Meringue Tart", price: 8.50, category: "Desserts", img: "https://i.postimg.cc/JnTvYGMz/Lemon-Meringue-Tart.png?q=80&w=1200&auto=format&fit=crop" },
+      { id: 8, name: "Strawberry Cheesecake Slice", price: 7.50, category: "Desserts", img: "https://i.postimg.cc/nLFRDBQ7/Strawberry-Cheesecake-Slice.png?q=80&w=1200&auto=format&fit=crop" },
+      { id: 9, name: "Hazelnut Praline Bonbons", price: 14.00, category: "Chocolate", img: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=1200&auto=format&fit=crop" },
+      { id: 10, name: "Cookie & Cream Gelato Pint", price: 12.00, category: "Ice Cream", img: "https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?q=80&w=1200&auto=format&fit=crop" },
+      { id: 11, name: "Tiramisu Cup", price: 6.50, category: "Desserts", img: "https://i.postimg.cc/zG9ZRcGp/Italian-Tiramisu1.png?q=80&w=1200&auto=format&fit=crop" },
+      { id: 12, name: "Matcha White Chocolate Bar", price: 8.00, category: "Chocolate", img: "https://i.postimg.cc/d0qjsGb8/Matcha-White-Chocolate-Bar.png?q=80&w=1200&auto=format&fit=crop" }
+    ];
+
+    // State
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let filter = 'All';
+
+    // Elements
+    const featuredGrid = document.getElementById('featuredGrid');
+    const shopGrid = document.getElementById('shopGrid');
+    const cartCount = document.getElementById('cartCount');
+    const cartCountFloat = document.getElementById('cartCountFloat');
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartItems = document.getElementById('cartItems');
+    const cartSubtotal = document.getElementById('cartSubtotal');
+    const openCart = document.getElementById('openCart');
+    const openCartMobile = document.getElementById('openCartMobile');
+    const floatingCart = document.getElementById('floatingCart');
+    const closeCart = document.getElementById('closeCart');
+    const cartBackdrop = document.getElementById('cartBackdrop');
+
+    function currency(n){ return `$${n.toFixed(2)}`; }
+
+    function renderProducts() {
+      // Featured: first 4
+      featuredGrid.innerHTML = PRODUCTS.slice(0, 4).map(p => productCard(p)).join('');
+      // Shop filtered
+      const list = filter === 'All' ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+      shopGrid.innerHTML = list.map(p => productCard(p)).join('');
+      bindAddToCart();
+    }
+
+    function productCard(p) {
+      return `
+      <div class="card bg-white rounded-2xl overflow-hidden shadow-soft flex flex-col">
+        <div class="relative">
+          <img src="${p.img}" alt="${p.name}" class="w-full h-48 object-cover">
+          <span class="absolute top-3 left-3 pill px-2.5 py-1 text-xs bg-white/80 text-cocoa">${p.category}</span>
+        </div>
+        <div class="p-4 flex-1 flex flex-col">
+          <h4 class="font-semibold text-cocoa">${p.name}</h4>
+          <div class="mt-auto flex items-center justify-between">
+            <span class="font-semibold text-truffle">${currency(p.price)}</span>
+            <button data-id="${p.id}" class="addToCart btn pill bg-cocoa text-white px-4 py-2">Add</button>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function bindAddToCart() {
+      document.querySelectorAll('.addToCart').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = Number(btn.getAttribute('data-id'));
+          const item = PRODUCTS.find(p => p.id === id);
+          const existing = cart.find(c => c.id === id);
+          if (existing) existing.qty += 1; else cart.push({ ...item, qty: 1 });
+          saveCart();
+          animateCartBump();
+          renderCart();
+        });
+      });
+    }
+
+    function saveCart(){ localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
+    function updateCartCount(){
+      const count = cart.reduce((a, c) => a + c.qty, 0);
+      if (cartCount) cartCount.textContent = count;
+      if (cartCountFloat) cartCountFloat.textContent = count;
+    }
+
+    function renderCart(){
+      if (!cartItems) return;
+      if (cart.length === 0) {
+        cartItems.innerHTML = `<div class="text-center text-truffle/60 py-12">Your cart is empty.</div>`;
+        cartSubtotal.textContent = currency(0);
+        return;
+      }
+      cartItems.innerHTML = cart.map(item => `
+        <div class="flex gap-3 py-3">
+          <img src="${item.img}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover">
+          <div class="flex-1">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="font-medium text-cocoa">${item.name}</div>
+                <div class="text-sm text-truffle/70">${item.category}</div>
+              </div>
+              <button aria-label="Remove" data-id="${item.id}" class="removeItem text-truffle/50 hover:text-cocoa">×</button>
+            </div>
+            <div class="flex items-center gap-2 mt-2">
+              <button data-id="${item.id}" class="qtyMinus pill px-2 py-1 bg-cream">-</button>
+              <span class="min-w-[2ch] text-center">${item.qty}</span>
+              <button data-id="${item.id}" class="qtyPlus pill px-2 py-1 bg-cream">+</button>
+              <div class="ml-auto font-semibold">${currency(item.price * item.qty)}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      const subtotal = cart.reduce((a, c) => a + c.price * c.qty, 0);
+      cartSubtotal.textContent = currency(subtotal);
+
+      cartItems.querySelectorAll('.qtyPlus').forEach(b => b.addEventListener('click', e => {
+        const id = Number(b.getAttribute('data-id'));
+        const it = cart.find(i => i.id === id); it.qty += 1; saveCart(); renderCart();
+      }));
+      cartItems.querySelectorAll('.qtyMinus').forEach(b => b.addEventListener('click', e => {
+        const id = Number(b.getAttribute('data-id'));
+        const it = cart.find(i => i.id === id); it.qty -= 1; if (it.qty <= 0) cart = cart.filter(i => i.id !== id); saveCart(); renderCart();
+      }));
+      cartItems.querySelectorAll('.removeItem').forEach(b => b.addEventListener('click', e => {
+        const id = Number(b.getAttribute('data-id'));
+        cart = cart.filter(i => i.id !== id); saveCart(); renderCart();
+      }));
+    }
+
+    function openCartDrawer(){ cartDrawer.classList.remove('hidden'); }
+    function closeCartDrawer(){ cartDrawer.classList.add('hidden'); }
+
+    function animateCartBump(){
+      [cartCount, cartCountFloat].forEach(el => {
+        if (!el) return;
+        el.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' });
+      });
+    }
+
+    // Filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-cocoa','text-white'));
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.add('bg-cream','text-cocoa','border','border-truffle/10'));
+        btn.classList.remove('bg-cream','text-cocoa','border','border-truffle/10');
+        btn.classList.add('bg-cocoa','text-white');
+        filter = btn.getAttribute('data-filter');
+        renderProducts();
+      });
+    });
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', () => {
+      const hidden = mobileMenu.classList.contains('hidden');
+      if (hidden) {
+        mobileMenu.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          mobileMenu.classList.add('mobile-menu-enter-active');
+        });
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('mobile-menu-enter-active');
+      }
+    });
+
+    // Hero slider (text slides)
+    const slides = Array.from(document.querySelectorAll('.hero-slide'));
+    let slideIndex = 0;
+    setInterval(() => {
+      slides[slideIndex].classList.remove('active');
+      slideIndex = (slideIndex + 1) % slides.length;
+      slides[slideIndex].classList.add('active');
+    }, 4000);
+
+    // Contact + Newsletter
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('contactMsg');
+      msg.textContent = 'Thanks! We will get back to you shortly.';
+      msg.classList.remove('hidden');
+      e.target.reset();
+    });
+    document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('newsletterMsg').classList.remove('hidden');
+      e.target.reset();
+    });
+
+    // Cart events
+    [openCart, openCartMobile, floatingCart].filter(Boolean).forEach(btn => btn.addEventListener('click', openCartDrawer));
+    [closeCart, cartBackdrop].forEach(el => el.addEventListener('click', closeCartDrawer));
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      alert('This is a demo checkout. Connect this button to WooCommerce checkout URL in WordPress.');
+    });
+
+    // Insta/Gallery demo
+    const instaImgs = [
+      "https://i.postimg.cc/FsjtMZr3/Raspberry-Tart1.png?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop",
+      "https://i.postimg.cc/dQHZ64Yw/Dessert.png?q=80&w=1200&auto=format&fit=crop",
+      "https://i.postimg.cc/NLh5qCbM/French-Macarons-Collection.png?q=80&w=1200&auto=format&fit=crop",
+      "https://i.postimg.cc/Y9BZJ6B4/Chocolate.png?q=80&w=1200&auto=format&fit=crop",
+      "https://i.postimg.cc/N07Cbsc9/Pistachio-Ice-Cream-Pint.png?q=80&w=1200&auto=format&fit=crop",
+      "https://i.postimg.cc/JnTvYGMz/Lemon-Meringue-Tart.png?q=80&w=1200&auto=format&fit=crop",
+      "https://i.postimg.cc/MKsH0YhR/Single-Origin-Dark-Bar-72.png?q=80&w=1200&auto=format&fit=crop",
+      "https://i.postimg.cc/PxMYG18c/Mint-Chocolate1.png?q=80&w=1200&auto=format&fit=crop",
+      "https://i.postimg.cc/sf6jwyfy/Sea-Salt-Caramel-Truffles.png?q=80&w=1200&auto=format&fit=crop",
+      "https://i.postimg.cc/nhD1RRnj/Opera-Cake1.png?q=80&w=1200&auto=format&fit=crop"
+    ];
+    const instaGrid = document.getElementById('instaGrid');
+    instaGrid.innerHTML = instaImgs.map(src => `
+      <a href="#gallery" class="group block relative rounded-xl overflow-hidden">
+        <img src="${src}" alt="Gallery image" class="w-full aspect-square object-cover group-hover:scale-105 transition duration-300">
+      </a>
+    `).join('');
+
+    // Init
+    renderProducts();
+    renderCart();
+    updateCartCount();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Accessibility: close cart with ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !cartDrawer.classList.contains('hidden')) closeCartDrawer();
+    });
+  </script>
+
+  <!-- Notes for WordPress/WooCommerce integration (non-rendering):
+    - Replace PRODUCTS with live WooCommerce products via REST API or WP loop.
+    - Map "Add" buttons to WC add_to_cart URLs or AJAX endpoints.
+    - Wire checkoutBtn to /checkout/ and cart drawer to /cart/ if preferred.
+    - Replace contact/newsletter handlers with WPForms/Contact Form 7/MailerLite embeds.
+  -->
+</body>
+</html>
