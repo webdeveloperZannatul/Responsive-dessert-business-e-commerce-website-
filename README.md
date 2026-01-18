@@ -1,0 +1,2 @@
+# Responsive-dessert-business-e-commerce-website-
+This project involved creating a modern, responsive e-commerce website for a dessert business, designed to attract customers and drive online orders. The website features a visually engaging hero section, structured product listings,seamless checkout flow and mobile-first responsiveness.The design and content were match the client’s brand identity 
